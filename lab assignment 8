@@ -1,0 +1,49 @@
+1. Create a synthetic dataset of 1000 data points for Linear regression analysis and save it in a .csv file. The dataset should have only one dependent variable and one independent variable.
+2. Plot the data points.
+3. Normalize the above synthetic dataset and perform linear regression. For this, split thedataset into train and test sets in the ratio 60:40. Evaluate the performance of the model on the test dataset and display the result. For evaluation, use different measures such as MAE, and RMSE
+4. Plot the best fit for the regression along with the train datapoint and the test datapoint separately.
+//code
+
+x1 <-seq(0.1,100,by=0.1)
+b <- rnorm(1000, 100, 60)
+y1 <- (5 * x1) + b
+print(length(y1))
+
+print(x1)
+plot(x1,y1,xlab="the x-axis",ylab="the y-axis",col="green")
+dataframe<-data.frame(x1,y1)
+print(dataframe)
+
+write.csv(dataframe , "D:/Assignment 8/dataframe1.csv" , row.names = FALSE)
+
+relation <-lm(y1 ~ x1,data=dataframe)
+#spliting data into 60-40 split
+x_train = x1[1:600]
+y_train = y1[1:600]
+
+x_test = x1[601:1000]
+y_test = y1[601:1000]
+
+train_data = data.frame(x_train,y_train)
+
+l.model = lm(y_train ~ x_train, data=train_data)
+
+print(summary(l.model))
+
+x_test = data.frame(x_train = x_test)
+y_pred = predict(l.model,newdata = x_test) 
+#prediction on test data
+print(head(y_pred))
+
+paste("RMSE of l.model is = ",sqrt(mean((y_test - y_pred)^2)))
+ae = sum(abs(y_pred - y_test)) 
+paste("Mean absolute error = ", ae/length(y_pred))
+
+#Plot the best fit for the regression along with the train datapoint and the test datapoint separately.
+x_test = array(c(unlist(x_test)))
+plot(x_test,y_test)
+lines(abline(l.model),col="yellow",lwd=6)
+
+plot(x_train,y_train)
+lines(abline(l.model),col="red",lwd=6)
+
